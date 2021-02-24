@@ -8,6 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.Collection;
 
+
+/**
+ * This entity represents the accounts role to know if this account is an Admin account or an User account
+ */
+
 @Entity
 @RequiredArgsConstructor
 @Getter

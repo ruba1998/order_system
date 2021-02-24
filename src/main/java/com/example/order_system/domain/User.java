@@ -14,6 +14,10 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This entity represents user and a needed information about him
+ */
+
 @Entity
 @RequiredArgsConstructor
 @Getter

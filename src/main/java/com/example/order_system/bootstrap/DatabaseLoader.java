@@ -1,9 +1,14 @@
 package com.example.order_system.bootstrap;
 
+import com.example.order_system.controller.AuthController;
+import com.example.order_system.domain.Restaurant;
 import com.example.order_system.domain.Role;
 import com.example.order_system.domain.User;
+import com.example.order_system.repository.RestaurantRepository;
 import com.example.order_system.repository.RoleRepository;
 import com.example.order_system.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -15,15 +20,18 @@ import java.util.Map;
 
 @Component
 public class DatabaseLoader implements CommandLineRunner {
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private RestaurantRepository restaurantRepository;
 
     private Map<String, User> users = new HashMap<>();
 
-    public DatabaseLoader(UserRepository userRepository, RoleRepository roleRepository) {
+    public DatabaseLoader(UserRepository userRepository, RoleRepository roleRepository, RestaurantRepository restaurantRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     @Override
@@ -61,6 +69,14 @@ public class DatabaseLoader implements CommandLineRunner {
         master.setConfirmPassword(secret);
         userRepository.save(master);
         users.put("super@gmail.com",master);
+
+        Restaurant restaurant1 = new Restaurant("Orgada Burger", "The best burger ever!", "Nablus");
+        restaurantRepository.save(restaurant1);
+
+        Restaurant restaurant2 = new Restaurant("Pizza House", "Several Italian dishes, Yummy Taste!", "Ramallah");
+        restaurantRepository.save(restaurant2);
+
+        logger.info("finished loading data");
     }
 
 }
