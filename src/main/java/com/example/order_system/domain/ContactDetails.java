@@ -15,15 +15,17 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ContactDetails {
+public class ContactDetails extends Auditable {
 
     @Id
     @GeneratedValue
     private long id;
 
     @NonNull
+    @NotEmpty(message = "Please enter the contact type")
     private String type;
 
+    @NonNull
     @NotEmpty(message = "Please enter the contact value")
     private String value;
 

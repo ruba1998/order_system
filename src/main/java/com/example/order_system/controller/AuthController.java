@@ -1,17 +1,11 @@
 package com.example.order_system.controller;
 
 import com.example.order_system.domain.User;
-import com.example.order_system.exceptionHandler.APIRequestException;
 import com.example.order_system.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -29,9 +23,36 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
     private UserService userService;
 
+/*
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+*/
+
     public AuthController(UserService userService) {
         this.userService = userService;
     }
+
+/*
+    @PostMapping("/login")
+    public String generateToken(@RequestBody AuthRequest authRequest) throws Exception {
+*/
+/*
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
+            );
+        } catch (Exception ex) {
+            throw new Exception("inavalid username/password");
+        }
+        return jwtUtil.generateToken(authRequest.getUserName());
+*//*
+
+    }
+
+*/
 
     @GetMapping("/register")
     public String register() {
@@ -66,8 +87,6 @@ public class AuthController {
         }
         return "redirect:/";
     }
-
-
 
 
 }

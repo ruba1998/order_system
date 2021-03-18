@@ -1,7 +1,6 @@
 package com.example.order_system.service;
 
 import com.example.order_system.domain.Restaurant;
-import com.example.order_system.exceptionHandler.BadRequestException;
 import com.example.order_system.repository.RestaurantRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +35,5 @@ public class RestaurantService {
     public List<Restaurant> findAll(){
         return restaurantRepository.findAll();
     }
-
 
 }

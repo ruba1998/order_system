@@ -1,9 +1,25 @@
 package com.example.order_system.controller;
 
 import com.example.order_system.domain.Auditable;
+import com.example.order_system.domain.ContactDetails;
+import com.example.order_system.domain.Restaurant;
+import com.example.order_system.exceptionHandler.BadRequestException;
+import com.example.order_system.exceptionHandler.ContactWithThisTypeAlreadyExist;
+import com.example.order_system.exceptionHandler.InternalServerErrorException;
+import com.example.order_system.exceptionHandler.ResourceNotFoundException;
 import com.example.order_system.service.ContactDetailsService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.order_system.service.RestaurantService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * This is a controller to take the requests which related to the contact details for specific restaurant
@@ -13,61 +29,119 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/restaurant/{id}/contactDetails")
 public class ContactDetailsController extends Auditable {
 
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantController.class);
+
+    private RestaurantService restaurantService;
     private ContactDetailsService contactDetailsService;
 
-    public ContactDetailsController(ContactDetailsService contactDetailsService) {
+    public ContactDetailsController(RestaurantService restaurantService, ContactDetailsService contactDetailsService) {
+        this.restaurantService = restaurantService;
         this.contactDetailsService = contactDetailsService;
     }
 
+    @GetMapping("/restaurant/{restaurantId}/contactDetails/{id}")
+    public ResponseEntity<ContactDetails> findContactDetailsById(@PathVariable Long restaurantId, @PathVariable Long id) {
 
-    /*
-    @PostMapping("/restaurant/contactdetails/add")
-    public String addContactDetails(@Valid ContactDetails contactDetails, BindingResult bindingResult)
-            throws BadRequestException
-    {
-        if(bindingResult.hasErrors()){
-            logger.info("Error occurred because not all fields are filled!");
-            throw new BadRequestException("Please make sure that you fill all fields");
+        if(!restaurantService.existsById(restaurantId)){
+            logger.info("Error occurred because this restaurant is not found!");
+            throw new ResourceNotFoundException("There is no restaurant with this id");
         }
-        else {
-            logger.info("New Contact details added to this restaurant!");
-            contactDetailsService.save(contactDetails);
-            return "redirect:/restaurant/" + contactDetails.getRestaurant().getId();
+
+        Optional<ContactDetails> optionalContactDetails = contactDetailsService.findById(id);
+
+        if(!optionalContactDetails.isPresent()){
+            logger.info("Error occurred because this Contact is not found!");
+            throw new ResourceNotFoundException("There is no contact with this id");
         }
+
+        return new ResponseEntity<>(optionalContactDetails.get(),HttpStatus.OK);
     }
 
-*/
 
+    @DeleteMapping("/restaurant/{restaurantId}/contactDetails/{id}")
+    public ResponseEntity<String> deleteContactDetailsById(@PathVariable Long restaurantId,@PathVariable Long id)
+            throws ResourceNotFoundException {
 
-/*
-    @PostMapping("/restaurant/contactdetails/add")
-    public ContactDetails addContactDetails(@Valid ContactDetails contactDetails, @PathVariable Long restaurantID, BindingResult bindingResult)
-            throws BadRequestException
-    {
-        Optional<Restaurant> optionalRestaurant = restaurantService.findById(restaurantID);
+        if(!restaurantService.existsById(restaurantId)){
+            logger.info("Error occurred because this restaurant is not found!");
+            throw new ResourceNotFoundException("There is no restaurant with this id");
+        }
 
-        if( optionalRestaurant.isPresent() ) {
-            Restaurant restaurant = optionalRestaurant.get();
-            List<ContactDetails> contactDetailsList = restaurant.getContactDetails();
-            contactDetailsList.add(contactDetails);
-            contactDetailsService.save(contactDetails);
-            restaurant.setContactDetails(contactDetailsList);
-            return contactDetails;
+        if(!contactDetailsService.existsById(id)){
+            logger.info("Error occurred because this Contact is not found!");
+            throw new ResourceNotFoundException("There is no contact with this id");
         }
-            if(bindingResult.hasErrors()){
-            logger.info("Error occurred because not all fields are filled!");
-            throw new BadRequestException("Please make sure that you fill all fields");
-        }
-        else {
-            logger.info("New Contact details added to this restaurant!");
-            return contactDetailsService.save(contactDetails);
-        }
+
+        contactDetailsService.deleteById(id);
+
+        return new ResponseEntity<>("deleted",HttpStatus.OK);
+
     }
-*/
 
 
+    @GetMapping("/restaurant/{restaurantId}/contactDetails")
+    public ResponseEntity<List<ContactDetails>> getAllContactDetails(@PathVariable Long restaurantId) {
+
+        if (!restaurantService.existsById(restaurantId)) {
+            logger.error("There is an Error of adding a new contact,The given ID is not found ");
+            throw new ResourceNotFoundException("RestaurantId " + restaurantId + " not found");
+        }
+
+        List<ContactDetails> contactDetailsList = contactDetailsService.findAllByRestaurantId(restaurantId);
+        return new ResponseEntity<>(contactDetailsList,HttpStatus.OK);
+
+    }
+
+
+    @PostMapping("/restaurant/{restaurantId}/contactDetails/create")
+    public ResponseEntity<ContactDetails> addContact(@RequestBody ContactDetails contactDetails,@PathVariable Long restaurantId)
+            throws ResourceNotFoundException, ContactWithThisTypeAlreadyExist {
+
+        Optional<Restaurant> restaurantOptional = restaurantService.findById(restaurantId);
+        if (!restaurantOptional.isPresent()) {
+            logger.error("There is an Error of adding a new contact,The given ID is not found ");
+            throw new ResourceNotFoundException("RestaurantId " + restaurantId + " not found");
+        }
+        List<ContactDetails> contactDetailsList = contactDetailsService.findAllByRestaurantId(restaurantId);
+        for (ContactDetails contact : contactDetailsList ) {
+            if( contactDetails.getType().equals(contact.getType()) ){
+                throw new ContactWithThisTypeAlreadyExist("There is a contact with this type for the restaurant with id: "
+                        +restaurantId);
+            }
+        }
+        Restaurant restaurant = restaurantOptional.get();
+        contactDetails.setRestaurant(restaurant);
+        contactDetailsService.save(contactDetails);
+        logger.info("New contact was saved successfully to Restaurant with Id " + restaurantId);
+        return new ResponseEntity<>(contactDetails, HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/restaurant/{restaurantId}/contactDetails/{id}/update")
+    public ResponseEntity<ContactDetails> updateContact(@PathVariable Long restaurantId,
+                                                           @PathVariable Long id,
+                                                           @RequestBody Map<String, Object> updatedContact) {
+
+        Optional<Restaurant> restaurantOptional = restaurantService.findById(restaurantId);
+        if (!restaurantOptional.isPresent()) {
+            logger.error("There is an Error of updating a contact,The given ID is not found ");
+            throw new ResourceNotFoundException("RestaurantId " + restaurantId + " not found");
+        }
+        Optional<ContactDetails> contactDetailsOptional = contactDetailsService.findById(id);
+        if (contactDetailsOptional.isPresent()) {
+            ContactDetails contactDetails = contactDetailsOptional.get();
+            for (Map.Entry<String, Object> entry : updatedContact.entrySet()) {
+                if( entry.getKey().equals("type") )
+                    contactDetails.setType((String)entry.getValue());
+                else if( entry.getKey().equals("value") )
+                    contactDetails.setValue((String)entry.getValue());
+            }
+            logger.info("restaurant information edited successfully");
+            return new ResponseEntity<>(contactDetailsService.save(contactDetails), HttpStatus.OK);
+        } else
+            return null;
+    }
 
 }

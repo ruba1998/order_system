@@ -35,7 +35,5 @@ public class Restaurant extends Auditable{
     @NotEmpty(message = "The restaurant must have a location")
     private String location;
 
-    @OneToMany(mappedBy = "restaurant")
-    private List<ContactDetails> contactDetails = new ArrayList<>();
 
 }

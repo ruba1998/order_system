@@ -1,20 +1,17 @@
 package com.example.order_system.controller;
 
-import com.example.order_system.domain.ContactDetails;
 import com.example.order_system.domain.Restaurant;
 import com.example.order_system.exceptionHandler.BadRequestException;
 import com.example.order_system.exceptionHandler.InternalServerErrorException;
-import com.example.order_system.service.ContactDetailsService;
 import com.example.order_system.service.RestaurantService;
-import com.example.order_system.utils.JsonNullableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,31 +35,40 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/")
-    public List<Restaurant> getRestaurants() {
+    @GetMapping("/restaurants")
+    public List<Restaurant> getAllRestaurants() {
         List<Restaurant> restaurants = restaurantService.findAll();
         logger.info("All restaurants fetched");
         return restaurants;
     }
 
-    @GetMapping("/{id}")
-    public Restaurant findRestaurantById(@PathVariable("id") Long id) {
+    @GetMapping("/restaurants/{id}")
+    public Restaurant findRestaurantById(@PathVariable Long id) {
         Optional<Restaurant> optionalRestaurant = restaurantService.findById(id);
         return optionalRestaurant.get();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/restaurants/{id}")
     public String deleteRestaurantById(@PathVariable("id") Long id) throws InternalServerErrorException {
         if(restaurantService.existsById(id) == false){
             logger.info("Error occurred because this restaurant is not found!");
             throw new InternalServerErrorException("There is no restaurant with this id");
         }
-        restaurantService.deleteById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        Restaurant restaurant = restaurantService.findById(id).get();
+        if (userDetails.getUsername().equals(restaurant.getCreatedBy())) {
+            restaurantService.deleteById(id);
+        }
+        else {
+            return ""+userDetails.getUsername();
+        }
         return "deleted";
     }
 
-    @PostMapping("/restaurant/create")
-    public Restaurant createRestaurant(@Valid Restaurant restaurant, BindingResult bindingResult)
+
+    @PostMapping("/restaurants/create")
+    public Restaurant createRestaurant(@Valid @RequestBody Restaurant restaurant, BindingResult bindingResult)
             throws BadRequestException
     {
         if(bindingResult.hasErrors()){
@@ -76,20 +82,13 @@ public class RestaurantController {
         }
     }
 
-    @PostMapping("/restaurant/{id}/update")
-    public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Map<String, Object> restaurantDetails, BindingResult bindingResult)
-            throws NullPointerException
+    @PostMapping("/restaurants/{id}/update")
+    public Restaurant updateRestaurant(@PathVariable Long id,
+                                       @RequestBody Map<String, Object> restaurantDetails)
     {
-            if(bindingResult.hasErrors()){
-                throw new NullPointerException("Please make sure that you fill all fields");
-            }
-
-            else {
                 Optional<Restaurant> restaurantOptional = restaurantService.findById(id);
-
                 if (restaurantOptional.isPresent()) {
                     Restaurant restaurant = restaurantOptional.get();
-
                     for (Map.Entry<String, Object> entry : restaurantDetails.entrySet()) {
                         if( entry.getKey().equals("name") )
                             restaurant.setName((String)entry.getValue());
@@ -105,7 +104,5 @@ public class RestaurantController {
                 } else
                     return null;
             }
-
-    }
 
 }
