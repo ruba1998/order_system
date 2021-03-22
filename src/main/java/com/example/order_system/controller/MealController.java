@@ -32,9 +32,8 @@ public class MealController {
         this.restaurantService = restaurantService;
     }
 
-    @PostMapping("/restaurant/{restaurantId}/meal/create")
+    @PostMapping("/restaurants/{restaurantId}/meals/create")
     public ResponseEntity<Meal> addMeal(@Valid @RequestBody Meal meal, @PathVariable Long restaurantId) {
-
         Optional<Restaurant> restaurantOptional = restaurantService.findById(restaurantId);
         if (!restaurantOptional.isPresent()) {
             logger.error("There is an Error of adding a new meal,The given ID is not found ");
@@ -47,10 +46,8 @@ public class MealController {
         return new ResponseEntity<>(meal, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/restaurant/{restaurantId}/meal/{id}")
-    public ResponseEntity<String> deleteMealById(@PathVariable Long restaurantId, @PathVariable Long id)
-            throws ResourceNotFoundException {
-
+    @DeleteMapping("/restaurants/{restaurantId}/meals/{id}")
+    public ResponseEntity<String> deleteMealById(@PathVariable Long restaurantId, @PathVariable Long id) {
         Optional<Meal> mealOptional = mealService.findByIdAndRestaurantId(id, restaurantId);
         if (!mealOptional.isPresent()) {
             logger.info("Error occurred because this meal is not found!");
@@ -62,22 +59,18 @@ public class MealController {
         return new ResponseEntity<>("deleted", HttpStatus.OK);
     }
 
-    @GetMapping("/restaurant/{restaurantId}/meals")
-    public ResponseEntity<List<Meal>> getAllMeals(@PathVariable Long restaurantId)
-            throws ResourceNotFoundException {
-
+    @GetMapping("/restaurants/{restaurantId}/meals")
+    public ResponseEntity<List<Meal>> getAllMeals(@PathVariable Long restaurantId) {
         if (!restaurantService.existsById(restaurantId)) {
             logger.error("There is an Error,The given ID is not found ");
             throw new ResourceNotFoundException("RestaurantId " + restaurantId + " not found");
         }
         List<Meal> mealList = mealService.findAllByRestaurantId(restaurantId);
         return new ResponseEntity<>(mealList, HttpStatus.OK);
-
     }
 
-    @GetMapping("/restaurant/{restaurantId}/meal/{id}")
+    @GetMapping("/restaurants/{restaurantId}/meals/{id}")
     public ResponseEntity<Meal> findMealById(@PathVariable Long restaurantId, @PathVariable Long id) {
-
         Optional<Meal> mealOptional = mealService.findByIdAndRestaurantId(id, restaurantId);
         if (!mealOptional.isPresent()) {
             logger.info("Error occurred because this meal is not found!");
@@ -87,13 +80,10 @@ public class MealController {
         return new ResponseEntity<>(mealOptional.get(), HttpStatus.OK);
     }
 
-
-    @PostMapping("/restaurant/{restaurantId}/meal/{id}/update")
+    @PostMapping("/restaurants/{restaurantId}/meals/{id}/update")
     public ResponseEntity<Meal> updateMeal(@PathVariable Long restaurantId,
-                                                        @PathVariable Long id,
-                                                        @RequestBody Map<String, Object> updatedMeal)
-            throws ResourceNotFoundException {
-
+                                           @PathVariable Long id,
+                                           @RequestBody Map<String, Object> updatedMeal) {
         Optional<Meal> mealOptional = mealService.findByIdAndRestaurantId(id, restaurantId);
         if (!mealOptional.isPresent()) {
             logger.info("Error occurred because this meal is not found!");
@@ -115,4 +105,3 @@ public class MealController {
 
 
     }
-

@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,29 +33,33 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/my_orders")
+    @GetMapping("/all_orders")
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.findAll();
         if( orders.isEmpty() ) {
             logger.info("You are not make any order");
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         logger.info("All orders fetched");
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        return new ResponseEntity(orders, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id, Principal principal) {
         Optional<Order> optionalOrder = orderService.findById(id);
         if(optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
-            logger.info("You are not make any order");
-            return new ResponseEntity<>(order, HttpStatus.OK);
-        }
-        else
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+                if ( !(principal.getName().equals(order.getCreatedBy())) ) {
+                    return new ResponseEntity("You are not allowed to make this request", HttpStatus.BAD_REQUEST);
+                }
+            }
+            return new ResponseEntity(order, HttpStatus.OK);
+        } else{
             throw new ResourceNotFoundException("Not found Order with id = " + id);
+        }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Order> createOrder(@Valid @RequestBody Order order, BindingResult bindingResult) {
@@ -60,7 +67,7 @@ public class OrderController {
             logger.info("Error occurred because not all fields are filled!");
             throw new BadRequestException("Please make sure that you fill all fields " +
                     "or that data type is suitable");
-        } else{
+        } else {
             // save Order
             logger.info("New Order was saved successfully.");
             orderService.save(order);
@@ -85,13 +92,17 @@ public class OrderController {
     }
 
     @PostMapping("/{id}/update")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order updatedOrder) {
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order updatedOrder, Principal principal) {
         Optional<Order> optionalOrder = orderService.findById(id);
-        if(optionalOrder.isPresent()) {
+        if( optionalOrder.isPresent() ) {
             Order order = optionalOrder.get();
-            order.setOrderStatus(updatedOrder.getOrderStatus());
-            orderService.save(order);
-            return new ResponseEntity(order, HttpStatus.OK);
+            if (principal.getName().equals(order.getCreatedBy())) {
+                order.setOrderStatus(updatedOrder.getOrderStatus());
+                orderService.save(order);
+                return new ResponseEntity(order, HttpStatus.OK);
+            } else {
+                return new ResponseEntity("You are not allowed to make this request", HttpStatus.BAD_REQUEST);
+            }
         }
         else
             throw new ResourceNotFoundException("Not found Order with id = " + id);

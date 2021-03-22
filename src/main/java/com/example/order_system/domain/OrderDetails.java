@@ -1,16 +1,15 @@
 package com.example.order_system.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -19,23 +18,18 @@ public class OrderDetails {
     @EmbeddedId
     private OrderDetailsId id;
 
-    @NonNull
-    @Length(max = 11)
-    @Column(nullable = false, length = 11)
+    @NotNull(message = "Please enter id")
     private Integer quantity;
 
     @CreatedBy
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User creator;
+    private String creator;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("orderDetailsList")
+    @JoinColumn(name = "order_id", nullable = false, insertable = false, updatable = false)
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "meal_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "meal_id", nullable = false, insertable = false, updatable = false)
     private Meal meal;
-
-
 }

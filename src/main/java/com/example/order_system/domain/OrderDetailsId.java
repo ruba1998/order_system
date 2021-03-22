@@ -2,6 +2,7 @@ package com.example.order_system.domain;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -14,17 +15,12 @@ import java.io.Serializable;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-class OrderDetailsId implements Serializable {
+public class OrderDetailsId implements Serializable {
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    @Column(name = "order_id")
+    private Long orderId;
 
-
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "meal_id", nullable = false)
-    private Meal meal;
+    @Column(name = "meal_id")
+    private Long mealId;
 
 }

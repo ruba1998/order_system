@@ -11,15 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/orders/{orderId}")
+@RequestMapping("")
 public class OrderDetailsController {
 
-    private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderDetailsController.class);
 
     private OrderService orderService;
     private OrderDetailsService orderDetailsService;
@@ -33,7 +34,7 @@ public class OrderDetailsController {
         this.mealService = mealService;
     }
 
-    @GetMapping("/order_details")
+    @GetMapping("/order_details/{orderId}")
     public ResponseEntity<List<OrderDetails>> getAllOrderDetails(@PathVariable Long orderId) {
         if (!orderService.existsById(orderId)) {
             logger.error("There is an Error of adding a new details,The given ID is not found ");
@@ -44,13 +45,17 @@ public class OrderDetailsController {
         }
     }
 
-    @GetMapping("/order_details/{id}")
-    public ResponseEntity<OrderDetails> getOrderDetailsById(@PathVariable Long orderId, @PathVariable Long id) {
+    @GetMapping("/order_details/{orderId}/{mealId}")
+    public ResponseEntity<OrderDetails> getOrderDetailsById(@PathVariable Long orderId, @PathVariable Long mealId) {
         if(!orderService.existsById(orderId)){
             logger.info("Error occurred because this order is not found!");
             throw new ResourceNotFoundException("There is no order with this id");
+        } else if(!mealService.existsById(mealId)){
+            logger.info("Error occurred because this meal is not found!");
+            throw new ResourceNotFoundException("There is no meal with this id");
         }
-        Optional<OrderDetails> optionalOrderDetails = orderDetailsService.findById(id);
+        OrderDetailsId orderDetailsId = new OrderDetailsId(orderId, mealId);
+        Optional<OrderDetails> optionalOrderDetails = orderDetailsService.findByDetailsId(orderDetailsId);
         if(!optionalOrderDetails.isPresent()){
             logger.info("Error occurred because this details is not found!");
             throw new ResourceNotFoundException("There is no order details with this id");
@@ -59,27 +64,32 @@ public class OrderDetailsController {
     }
 
 
-    @DeleteMapping("/order_details/{id}")
-    public ResponseEntity deleteOrderDetailsById(@PathVariable Long orderId,@PathVariable Long id) {
-        if(!orderService.existsById(orderId)){
+    @DeleteMapping("/order_details/{orderId}/{mealId}")
+    public ResponseEntity deleteOrderDetailsById(@PathVariable Long orderId,@PathVariable Long mealId) {
+        if(!orderService.existsById(orderId)) {
             logger.info("Error occurred because this order is not found!");
             throw new ResourceNotFoundException("There is no order with this id");
+        } else if(!mealService.existsById(mealId)){
+            logger.info("Error occurred because this meal is not found!");
+            throw new ResourceNotFoundException("There is no meal with this id");
         }
-        else if(!orderDetailsService.existsById(id)){
+        OrderDetailsId orderDetailsId = new OrderDetailsId(orderId, mealId);
+        Optional<OrderDetails> optionalOrderDetails = orderDetailsService.findByDetailsId(orderDetailsId);
+        if(!optionalOrderDetails.isPresent()){
             logger.info("Error occurred because this details is not found!");
             throw new ResourceNotFoundException("There is no order details with this id");
         }
         else {
-            orderDetailsService.deleteById(id);
+            orderDetailsService.deleteById(orderDetailsId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
-    @PostMapping("order_details/{mealId}/create")
+    @PostMapping("order_details/{orderId}/{mealId}/create")
     public ResponseEntity<OrderDetails> addOrderDetails(@RequestBody OrderDetails orderDetails,
                                                         @PathVariable Long orderId,
-                                                        @PathVariable Long mealId) {
-
+                                                        @PathVariable Long mealId,
+                                                        Principal principal) {
         Optional<Order> optionalOrder = orderService.findById(orderId);
         Optional<Meal> optionalMeal = mealService.findById(mealId);
         if (!optionalOrder.isPresent()) {
@@ -90,35 +100,46 @@ public class OrderDetailsController {
             throw new ResourceNotFoundException("Meal Id " + mealId + " not found");
         }
         Order order = optionalOrder.get();
-        orderDetails.setOrder(order);
         Meal meal = optionalMeal.get();
-        orderDetails.setMeal(meal);
-        orderDetailsService.save(orderDetails);
-        logger.info("New details was saved successfully to order with Id " + orderId);
-        return new ResponseEntity<>(orderDetails, HttpStatus.CREATED);
+        if ( !principal.getName().equals(order.getCreatedBy()) ){
+            return new ResponseEntity("You are not created the order with id " + orderId + ", you can't add details for it",
+                    HttpStatus.BAD_REQUEST);
+        } else {
+            OrderDetailsId orderDetailsId = new OrderDetailsId();
+            orderDetailsId.setOrderId(orderId);
+            orderDetailsId.setMealId(mealId);
+            orderDetails.setOrder(order);
+            orderDetails.setMeal(meal);
+            orderDetails.setId(orderDetailsId);
+            orderDetails.setCreator(order.getCreatedBy());
+            orderDetailsService.save(orderDetails);
+            logger.info("New details was saved successfully to order with Id " + orderId);
+            return new ResponseEntity<>(orderDetails, HttpStatus.CREATED);
+        }
     }
 
-    @PostMapping("/{id}/update")
+    @PostMapping("/order_details/{orderId}/{mealId}/update")
     public ResponseEntity<OrderDetails> updateOrder(@PathVariable Long orderId,
-                                                    @PathVariable Long id,
+                                                    @PathVariable Long mealId,
                                                     @RequestBody OrderDetails updatedDetails) {
-
-        Optional<Order> orderOptional = orderService.findById(orderId);
-        Optional<OrderDetails> orderDetailsOptional = orderDetailsService.findById(id);
-        if (!orderOptional.isPresent()) {
-            logger.error("There is an Error of updating the order details,The given ID is not found ");
-            throw new ResourceNotFoundException("Order Id " + orderId + " not found");
+        if(!orderService.existsById(orderId)) {
+            logger.info("Error occurred because this order is not found!");
+            throw new ResourceNotFoundException("There is no order with this id");
+        } else if(!mealService.existsById(mealId)){
+            logger.info("Error occurred because this meal is not found!");
+            throw new ResourceNotFoundException("There is no meal with this id");
         }
-        else if (!orderDetailsOptional.isPresent()) {
-            logger.error("There is an Error of updating the order details,The given ID is not found ");
-            throw new ResourceNotFoundException("Order details Id " + id + " not found");
-        }
-        else {
-            OrderDetails orderDetails = orderDetailsOptional.get();
+        OrderDetailsId orderDetailsId = new OrderDetailsId(orderId, mealId);
+        Optional<OrderDetails> optionalOrderDetails = orderDetailsService.findByDetailsId(orderDetailsId);
+        if(optionalOrderDetails.isPresent()) {
+            OrderDetails orderDetails = optionalOrderDetails.get();
             orderDetails.setQuantity(updatedDetails.getQuantity());
             orderDetailsService.save(orderDetails);
             logger.info("order details information edited successfully");
             return new ResponseEntity(orderDetails, HttpStatus.OK);
+        } else {
+            logger.info("Error occurred because this details not found!");
+            throw new ResourceNotFoundException("There is no details with this id");
         }
 
     }

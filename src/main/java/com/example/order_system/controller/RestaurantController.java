@@ -3,9 +3,13 @@ package com.example.order_system.controller;
 import com.example.order_system.domain.Restaurant;
 import com.example.order_system.exceptionHandler.BadRequestException;
 import com.example.order_system.exceptionHandler.InternalServerErrorException;
+import com.example.order_system.exceptionHandler.ResourceNotFoundException;
 import com.example.order_system.service.RestaurantService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,12 +38,11 @@ public class RestaurantController {
         this.restaurantService = restaurantService;
     }
 
-
-    @GetMapping("/restaurants")
-    public List<Restaurant> getAllRestaurants() {
+    @GetMapping("/")
+    public ResponseEntity<List<Restaurant>> getAllRestaurants() {
         List<Restaurant> restaurants = restaurantService.findAll();
         logger.info("All restaurants fetched");
-        return restaurants;
+        return new ResponseEntity(restaurants, HttpStatus.OK);
     }
 
     @GetMapping("/restaurants/{id}")
@@ -49,36 +52,34 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/restaurants/{id}")
-    public String deleteRestaurantById(@PathVariable("id") Long id) throws InternalServerErrorException {
+    public ResponseEntity<String> deleteRestaurantById(@PathVariable("id") Long id) {
         if(restaurantService.existsById(id) == false){
             logger.info("Error occurred because this restaurant is not found!");
-            throw new InternalServerErrorException("There is no restaurant with this id");
+            throw new ResourceNotFoundException("There is no restaurant with id "+ id);
         }
+/*
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Restaurant restaurant = restaurantService.findById(id).get();
         if (userDetails.getUsername().equals(restaurant.getCreatedBy())) {
-            restaurantService.deleteById(id);
-        }
-        else {
-            return ""+userDetails.getUsername();
-        }
-        return "deleted";
+*/
+        restaurantService.deleteById(id);
+        return new ResponseEntity<>("Restaurant with id = "+ id + "has been Deleted",HttpStatus.OK);
     }
 
 
-    @PostMapping("/restaurants/create")
-    public Restaurant createRestaurant(@Valid @RequestBody Restaurant restaurant, BindingResult bindingResult)
-            throws BadRequestException
+    @PostMapping(value = "/restaurants/create")
+    public ResponseEntity<Restaurant> createRestaurant(@Valid @RequestBody Restaurant restaurant,
+                                                       BindingResult bindingResult)
     {
         if(bindingResult.hasErrors()){
             logger.info("Error occurred because not all fields are filled!");
             throw new BadRequestException("Please make sure that you fill all fields");
-        }
-        else{
+        } else{
             // save Restaurant
             logger.info("New Restaurant was saved successfully.");
-            return restaurantService.save(restaurant);
+            restaurantService.save(restaurant);
+            return new ResponseEntity(restaurant, HttpStatus.CREATED);
         }
     }
 
@@ -86,21 +87,19 @@ public class RestaurantController {
     public Restaurant updateRestaurant(@PathVariable Long id,
                                        @RequestBody Map<String, Object> restaurantDetails)
     {
-                Optional<Restaurant> restaurantOptional = restaurantService.findById(id);
-                if (restaurantOptional.isPresent()) {
-                    Restaurant restaurant = restaurantOptional.get();
-                    for (Map.Entry<String, Object> entry : restaurantDetails.entrySet()) {
-                        if( entry.getKey().equals("name") )
-                            restaurant.setName((String)entry.getValue());
-                        else if( entry.getKey().equals("description") )
-                            restaurant.setDescription((String)entry.getValue());
-                        else if( entry.getKey().equals("location") )
-                            restaurant.setLocation((String)entry.getValue());
-                    }
-
-                    logger.info("restaurant information edited successfully");
-
-                    return restaurantService.save(restaurant);
+        Optional<Restaurant> restaurantOptional = restaurantService.findById(id);
+        if (restaurantOptional.isPresent()) {
+            Restaurant restaurant = restaurantOptional.get();
+            for (Map.Entry<String, Object> entry : restaurantDetails.entrySet()) {
+                if( entry.getKey().equals("name") )
+                    restaurant.setName((String)entry.getValue());
+                else if( entry.getKey().equals("description") )
+                    restaurant.setDescription((String)entry.getValue());
+                else if( entry.getKey().equals("location") )
+                    restaurant.setLocation((String)entry.getValue());
+            }
+            logger.info("restaurant information edited successfully");
+            return restaurantService.save(restaurant);
                 } else
                     return null;
             }

@@ -1,6 +1,119 @@
-2021-03-17 01:36:22.386  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10m48s107ms523µs100ns).
-2021-03-17 09:28:22.497  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7h7m34s818ms419µs600ns).
-2021-03-17 17:14:47.451  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h27m19s684ms95µs600ns).
-2021-03-17 18:55:16.993  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=36m28s493ms509µs100ns).
-2021-03-17 21:25:30.378  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2h12s864ms514µs400ns).
-2021-03-17 22:48:46.963  WARN 8492 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=53m16s92ms620µs900ns).
+2021-03-22 00:21:04.226  INFO 16524 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Starting OrderSystemApplication using Java 15.0.1 on DESKTOP-UVCK29M with PID 16524 (C:\Users\msys\Downloads\order_system\target\classes started by msys in C:\Users\msys\Downloads\order_system)
+2021-03-22 00:21:04.232  INFO 16524 --- [restartedMain] c.e.order_system.OrderSystemApplication  : No active profile set, falling back to default profiles: default
+2021-03-22 00:21:04.287  INFO 16524 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-03-22 00:21:04.287  INFO 16524 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-03-22 00:21:04.980  INFO 16524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-03-22 00:21:05.044  INFO 16524 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 60 ms. Found 7 JPA repository interfaces.
+2021-03-22 00:21:05.272  INFO 16524 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$b43c936b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-03-22 00:21:05.303  INFO 16524 --- [restartedMain] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2021-03-22 00:21:05.552  INFO 16524 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-03-22 00:21:05.561  INFO 16524 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 00:21:05.561  INFO 16524 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-03-22 00:21:05.693  INFO 16524 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-03-22 00:21:05.693  INFO 16524 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1404 ms
+2021-03-22 00:21:05.810  INFO 16524 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 00:21:05.841  INFO 16524 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.27.Final
+2021-03-22 00:21:05.916  INFO 16524 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 00:21:05.980  INFO 16524 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-03-22 00:21:06.214  INFO 16524 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-03-22 00:21:06.223  INFO 16524 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2021-03-22 00:21:08.897  INFO 16524 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 00:21:08.916  INFO 16524 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-03-22 00:21:08.957  INFO 16524 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-03-22 00:21:09.372  WARN 16524 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 00:21:09.542  INFO 16524 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@272ea18, org.springframework.security.web.context.SecurityContextPersistenceFilter@74b2ad25, org.springframework.security.web.header.HeaderWriterFilter@3ba55c8c, org.springframework.security.web.authentication.logout.LogoutFilter@7111d3de, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@764c9ced, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@76277213, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@995a6c3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1d66de4c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@578cbae4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@35dd16e4, org.springframework.security.web.session.SessionManagementFilter@11c50deb, org.springframework.security.web.access.ExceptionTranslationFilter@9e89a16, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6376cfc]
+2021-03-22 00:21:09.619  INFO 16524 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-03-22 00:21:09.843  INFO 16524 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-03-22 00:21:09.851  INFO 16524 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Started OrderSystemApplication in 5.975 seconds (JVM running for 6.737)
+2021-03-22 00:21:10.234  INFO 16524 --- [restartedMain] c.e.o.controller.AuthController          : finished loading data
+2021-03-22 00:21:23.139  INFO 16524 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 00:21:23.140  INFO 16524 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-03-22 00:21:23.141  INFO 16524 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-03-22 00:21:33.300  INFO 16524 --- [http-nio-8080-exec-3] c.e.o.controller.RestaurantController    : All restaurants fetched
+2021-03-22 00:21:56.645  INFO 16524 --- [http-nio-8080-exec-5] c.e.o.controller.OrderController         : New Order was saved successfully.
+2021-03-22 00:22:00.007  INFO 16524 --- [http-nio-8080-exec-6] c.e.o.controller.AuthController          : New meal added successfully to Restaurant with Id 7
+2021-03-22 00:23:46.641  INFO 10996 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Starting OrderSystemApplication using Java 15.0.1 on DESKTOP-UVCK29M with PID 10996 (C:\Users\msys\Downloads\order_system\target\classes started by msys in C:\Users\msys\Downloads\order_system)
+2021-03-22 00:23:46.644  INFO 10996 --- [restartedMain] c.e.order_system.OrderSystemApplication  : No active profile set, falling back to default profiles: default
+2021-03-22 00:23:46.685  INFO 10996 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-03-22 00:23:46.686  INFO 10996 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-03-22 00:23:47.379  INFO 10996 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-03-22 00:23:47.447  INFO 10996 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 63 ms. Found 7 JPA repository interfaces.
+2021-03-22 00:23:47.676  INFO 10996 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$33a7dd44] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-03-22 00:23:47.715  INFO 10996 --- [restartedMain] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2021-03-22 00:23:47.997  INFO 10996 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-03-22 00:23:48.001  INFO 10996 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 00:23:48.001  INFO 10996 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-03-22 00:23:48.153  INFO 10996 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-03-22 00:23:48.153  INFO 10996 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1467 ms
+2021-03-22 00:23:48.262  INFO 10996 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 00:23:48.290  INFO 10996 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.27.Final
+2021-03-22 00:23:48.364  INFO 10996 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 00:23:48.426  INFO 10996 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-03-22 00:23:48.655  INFO 10996 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-03-22 00:23:48.662  INFO 10996 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2021-03-22 00:23:51.188  INFO 10996 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 00:23:51.199  INFO 10996 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-03-22 00:23:51.234  INFO 10996 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-03-22 00:23:51.652  WARN 10996 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 00:23:51.852  INFO 10996 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@786314a0, org.springframework.security.web.context.SecurityContextPersistenceFilter@2ff13f3, org.springframework.security.web.header.HeaderWriterFilter@2475357c, org.springframework.security.web.authentication.logout.LogoutFilter@79e9a579, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@104bb708, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@6cc11b45, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@6d54139e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@755cde99, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@477dcb05, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@49530349, org.springframework.security.web.session.SessionManagementFilter@6e964acd, org.springframework.security.web.access.ExceptionTranslationFilter@1f99e1de, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3fc2439b]
+2021-03-22 00:23:51.927  INFO 10996 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-03-22 00:23:52.138  INFO 10996 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-03-22 00:23:52.152  INFO 10996 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Started OrderSystemApplication in 5.88 seconds (JVM running for 6.641)
+2021-03-22 00:23:52.517  INFO 10996 --- [restartedMain] c.e.o.controller.AuthController          : finished loading data
+2021-03-22 00:24:04.559  INFO 10996 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 00:24:04.561  INFO 10996 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-03-22 00:24:04.562  INFO 10996 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-03-22 00:24:18.280  INFO 10996 --- [http-nio-8080-exec-3] c.e.o.controller.RestaurantController    : All restaurants fetched
+2021-03-22 00:25:08.980  INFO 10996 --- [http-nio-8080-exec-6] c.e.o.controller.OrderController         : New Order was saved successfully.
+2021-03-22 00:25:13.369  INFO 10996 --- [http-nio-8080-exec-9] c.e.o.controller.AuthController          : New meal added successfully to Restaurant with Id 7
+2021-03-22 00:25:16.249  INFO 10996 --- [http-nio-8080-exec-8] c.e.o.controller.OrderDetailsController  : admin@gmail.com
+2021-03-22 00:25:16.250  INFO 10996 --- [http-nio-8080-exec-8] c.e.o.controller.OrderDetailsController  :  admin@gmail.com
+2021-03-22 00:25:16.299  INFO 10996 --- [http-nio-8080-exec-8] c.e.o.controller.OrderDetailsController  : New details was saved successfully to order with Id 9
+2021-03-22 09:35:37.371  WARN 10996 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=7h26m52s870ms21µs399ns).
+2021-03-22 09:48:51.994  INFO 14220 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Starting OrderSystemApplication using Java 15.0.1 on DESKTOP-UVCK29M with PID 14220 (C:\Users\msys\Downloads\order_system\target\classes started by msys in C:\Users\msys\Downloads\order_system)
+2021-03-22 09:48:51.996  INFO 14220 --- [restartedMain] c.e.order_system.OrderSystemApplication  : No active profile set, falling back to default profiles: default
+2021-03-22 09:48:52.036  INFO 14220 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2021-03-22 09:48:52.036  INFO 14220 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2021-03-22 09:48:52.763  INFO 14220 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-03-22 09:48:52.855  INFO 14220 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 84 ms. Found 7 JPA repository interfaces.
+2021-03-22 09:48:53.159  INFO 14220 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.ws.config.annotation.DelegatingWsConfiguration' of type [org.springframework.ws.config.annotation.DelegatingWsConfiguration$$EnhancerBySpringCGLIB$$d2cdba21] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-03-22 09:48:53.252  INFO 14220 --- [restartedMain] .w.s.a.s.AnnotationActionEndpointMapping : Supporting [WS-Addressing August 2004, WS-Addressing 1.0]
+2021-03-22 09:48:53.600  INFO 14220 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-03-22 09:48:53.612  INFO 14220 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-03-22 09:48:53.613  INFO 14220 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.41]
+2021-03-22 09:48:53.737  INFO 14220 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-03-22 09:48:53.737  INFO 14220 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1700 ms
+2021-03-22 09:48:53.919  INFO 14220 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-03-22 09:48:54.005  INFO 14220 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.27.Final
+2021-03-22 09:48:54.210  INFO 14220 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-03-22 09:48:54.304  INFO 14220 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-03-22 09:48:54.777  INFO 14220 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-03-22 09:48:54.797  INFO 14220 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2021-03-22 09:48:57.528  INFO 14220 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-03-22 09:48:57.540  INFO 14220 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-03-22 09:48:57.582  INFO 14220 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2021-03-22 09:48:58.089  WARN 14220 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-03-22 09:48:58.307  INFO 14220 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@20f1c170, org.springframework.security.web.context.SecurityContextPersistenceFilter@486b6b9e, org.springframework.security.web.header.HeaderWriterFilter@718b2c5b, org.springframework.security.web.authentication.logout.LogoutFilter@4dd2a7ef, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@1498a521, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@3233e919, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@76c5103, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4244c511, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d17b7f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@28cdad5b, org.springframework.security.web.session.SessionManagementFilter@b9bd649, org.springframework.security.web.access.ExceptionTranslationFilter@420ea2e4, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@396bc257]
+2021-03-22 09:48:58.380  INFO 14220 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-03-22 09:48:58.605  INFO 14220 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-03-22 09:48:58.614  INFO 14220 --- [restartedMain] c.e.order_system.OrderSystemApplication  : Started OrderSystemApplication in 6.992 seconds (JVM running for 7.819)
+2021-03-22 09:48:58.943  INFO 14220 --- [restartedMain] c.e.o.controller.AuthController          : finished loading data
+2021-03-22 09:49:31.133  INFO 14220 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-03-22 09:49:31.134  INFO 14220 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-03-22 09:49:31.136  INFO 14220 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2021-03-22 09:49:38.119  INFO 14220 --- [http-nio-8080-exec-3] c.e.o.controller.RestaurantController    : All restaurants fetched
+2021-03-22 09:50:11.651  INFO 14220 --- [http-nio-8080-exec-5] c.e.o.controller.RestaurantController    : All restaurants fetched
+2021-03-22 09:50:35.826  INFO 14220 --- [http-nio-8080-exec-9] c.e.o.controller.OrderController         : New Order was saved successfully.
+2021-03-22 09:50:44.143  INFO 14220 --- [http-nio-8080-exec-10] c.e.o.controller.AuthController          : New meal added successfully to Restaurant with Id 7
+2021-03-22 09:50:49.117  INFO 14220 --- [http-nio-8080-exec-1] c.e.o.controller.OrderDetailsController  : Error occurred because this details is not found!
+2021-03-22 09:50:49.124  WARN 14220 --- [http-nio-8080-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.order_system.exceptionHandler.ResourceNotFoundException: There is no order details with this id]
+2021-03-22 09:51:05.792  INFO 14220 --- [http-nio-8080-exec-2] c.e.o.controller.OrderDetailsController  : New details was saved successfully to order with Id 9
+2021-03-22 09:59:24.617  WARN 14220 --- [http-nio-8080-exec-4] o.s.web.servlet.PageNotFound             : Request method 'POST' not supported
+2021-03-22 09:59:24.621  WARN 14220 --- [http-nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' not supported]
+2021-03-22 09:59:40.609  INFO 14220 --- [http-nio-8080-exec-6] c.e.o.controller.OrderDetailsController  : Error occurred because this details not found!
+2021-03-22 09:59:40.612  WARN 14220 --- [http-nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.order_system.exceptionHandler.ResourceNotFoundException: There is no details with this id]
+2021-03-22 10:00:41.105  INFO 14220 --- [http-nio-8080-exec-8] c.e.o.controller.OrderDetailsController  : Error occurred because this details is not found!
+2021-03-22 10:00:41.108  WARN 14220 --- [http-nio-8080-exec-8] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [com.example.order_system.exceptionHandler.ResourceNotFoundException: There is no order details with this id]
+2021-03-22 10:00:48.577  INFO 14220 --- [http-nio-8080-exec-9] c.e.o.controller.OrderDetailsController  : New details was saved successfully to order with Id 9
+2021-03-22 10:01:05.457  INFO 14220 --- [http-nio-8080-exec-10] c.e.o.controller.OrderDetailsController  : order details information edited successfully
+2021-03-22 10:01:11.924  INFO 14220 --- [http-nio-8080-exec-1] c.e.o.controller.OrderDetailsController  : New details was saved successfully to order with Id 9
